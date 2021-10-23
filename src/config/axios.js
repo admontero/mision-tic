@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const clientAxios = axios.create({
-    baseURL: 'https://code-box-api.herokuapp.com/api'
+    baseURL: process.env.REACT_APP_BACKEND_URL
 });
 
 export default clientAxios;

@@ -42,7 +42,7 @@ const Login = (props) => {
   const RespuestaGoogle = (respuesta) =>{
     axios({
       method: "POST",
-      url: "https://code-box-api.herokuapp.com/api/googlelogin",
+      url: `${process.env.REACT_APP_BACKEND_URL}/googlelogin`,
       data: { tokenId: respuesta.tokenId }
     }).then(res => {
       startSession(res);
