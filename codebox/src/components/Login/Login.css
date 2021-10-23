@@ -1,0 +1,31 @@
+.login-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: calc(100vh - 90px);
+}
+
+.login{
+    background-color: white;
+    border-radius: .25rem;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    align-items: center;
+    width: fit-content;
+    height: fit-content;
+    row-gap: 1rem;
+    -webkit-box-shadow: 0px 2px 4px -2px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 2px 4px -2px rgba(0,0,0,0.75);
+    box-shadow: 0px 2px 4px -2px rgba(0,0,0,0.75);
+}
+
+.login img{
+    width: 20rem;
+}
+
+h2{
+    font-family: 'Maven Pro', sans-serif;
+    font-weight: 300;
+    color: #1176ae;
+}

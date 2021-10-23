@@ -1,0 +1,21 @@
+import {
+    MOSTRAR_ALERTA,
+    CERRAR_ALERTA,
+} from '../../types';
+
+export default (state, action) => {
+    switch(action.type) {
+        case MOSTRAR_ALERTA:
+            return {
+                ...state,
+                alert: action.payload
+            }
+            case CERRAR_ALERTA:
+                return {
+                    ...state,
+                    alert: null,
+                }
+        default: 
+            return state;
+    }
+}
