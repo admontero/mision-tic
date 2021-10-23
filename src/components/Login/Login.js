@@ -40,12 +40,9 @@ const Login = (props) => {
   }, [alert]);
   
   const RespuestaGoogle = (respuesta) =>{
-    clientAxios({
-      method: "POST",
-      url: `${process.env.REACT_APP_BACKEND_URL}/googlelogin`,
-      data: { tokenId: respuesta.tokenId }
-    }).then(res => {
-      startSession(res);
+    clientAxios.post('auth', { tokenId: respuesta.tokenId })
+      .then(res => {
+        startSession(res);
     });
   };
 
