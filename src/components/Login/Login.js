@@ -63,7 +63,7 @@ const Login = (props) => {
           <img src={logo} alt=""></img>
           
           <GoogleLogin
-            clientId="205955155856-abm0lv2scjct0mpql8vlq4m6l90n5k66.apps.googleusercontent.com"
+            clientId={ process.env.GOOGLE_CLIENT_ID }
             buttonText="Acceder con Google"
             onSuccess={ RespuestaGoogle }
             onFailure={ RespuestaGoogle }
