@@ -2,7 +2,7 @@ import React, { Fragment, useContext, useEffect } from 'react';
 import GoogleLogin from 'react-google-login';
 import logo from './../Img/Codebox.jpg';
 import Alert from '../includes/Alert';
-import axios from 'axios';
+import clientAxios from '../../config/axios';
 import "./Login.css";
 
 import AlertContext from "../../context/alerts/AlertContext";
@@ -40,7 +40,7 @@ const Login = (props) => {
   }, [alert]);
   
   const RespuestaGoogle = (respuesta) =>{
-    axios({
+    clientAxios({
       method: "POST",
       url: `${process.env.REACT_APP_BACKEND_URL}/googlelogin`,
       data: { tokenId: respuesta.tokenId }
