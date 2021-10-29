@@ -6,6 +6,7 @@
 }
 
 .login{
+    min-width: 20rem;
     background-color: white;
     border-radius: .25rem;
     display: flex;
@@ -21,10 +22,10 @@
 }
 
 .login img{
-    width: 20rem;
+    width: 5rem;
 }
 
-h2{
+h1{
     font-family: 'Maven Pro', sans-serif;
     font-weight: 300;
     color: #1176ae;

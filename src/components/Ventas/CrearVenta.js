@@ -18,14 +18,11 @@ const CrearVenta = () => {
     //Obtener productos cuando cargue el componente
     useEffect(() => {
         const consultAPI = async () => {
-            //const url = 'http://localhost:8080/api/productos';
-    
             const results = await clientAxios.get('/productos');
-
             getProducts(results.data.products);
         }
-
         consultAPI();
+        //eslint-disable-next-line
     }, []);
 
     useEffect(() => {
@@ -36,6 +33,7 @@ const CrearVenta = () => {
         return () => {
             clearTimeout(timer);
         };
+        //eslint-disable-next-line
     }, [alert]);
 
     let history = useHistory();
@@ -87,7 +85,7 @@ const CrearVenta = () => {
             //return alert('El id, el precio y la cantidad del producto son requeridos');
         }
 
-        let result = products.filter(product => product._id == product_id);
+        let result = products.filter(product => product._id === product_id);
 
         if (result.length === 0) {
             closeAlert();
@@ -115,7 +113,7 @@ const CrearVenta = () => {
 
     const deleteProduct = (id, e) => {
         //Guardamos todos los productos en una nueva variable a excepción del que tenga la id
-        let newProducts = productsPurchased.filter(product => product.product_id != id);
+        let newProducts = productsPurchased.filter(product => product.product_id !== id);
         //Actualizamos el state de productos con la nueva variable
         setProductsPurchased([
             ...newProducts
@@ -135,7 +133,7 @@ const CrearVenta = () => {
 
     const fillForm = (id, e) => {
         //Obtenemos el producto a editar
-        let result = productsPurchased.filter(product => product.product_id == id);
+        let result = productsPurchased.filter(product => product.product_id === id);
         //Aplicamos destructuring al array resultado
         const [ productEdit ] = result;
         //Llenamos el state con la información del producto

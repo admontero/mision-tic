@@ -5,7 +5,7 @@ import {
     CERRAR_SESION
 } from '../../types';
 
-export default (state, action) => {
+const AuthReducer = (state, action) => {
     switch(action.type) {
         case LOGIN_EXITOSO:
             localStorage.setItem('token', action.payload.token);
@@ -37,3 +37,5 @@ export default (state, action) => {
             return state;
     }
 }
+
+export default AuthReducer;

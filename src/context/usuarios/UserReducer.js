@@ -2,7 +2,7 @@ import {
     OBTENER_USUARIOS
 } from '../../types';
 
-export default (state, action) => {
+const UserReducer = (state, action) => {
     switch(action.type) {
         case OBTENER_USUARIOS:
             return {
@@ -13,3 +13,5 @@ export default (state, action) => {
             return state;
     }
 }
+
+export default UserReducer;

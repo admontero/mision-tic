@@ -10,7 +10,7 @@ const EditarUsuario = (props) => {
     const alertsContext = useContext(AlertContext);
     const { alert, showAlert, closeAlert } = alertsContext;
 
-    const { email, imageurl, name, role, status, _id } = props.location.state;
+    const { role, status, _id } = props.location.state;
     
     const [user, setUser] = useState({
         role: role,
@@ -25,6 +25,7 @@ const EditarUsuario = (props) => {
         return () => {
             clearTimeout(timer);
         };
+        //eslint-disable-next-line
     }, [alert]);
 
     let history = useHistory();

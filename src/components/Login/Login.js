@@ -1,10 +1,13 @@
-import React, { Fragment, useContext, useEffect } from 'react';
+import { Fragment, useContext, useEffect } from 'react';
 import GoogleLogin from 'react-google-login';
-import logo from './../Img/Codebox.jpg';
-import Alert from '../includes/Alert';
+//HELPERS
 import clientAxios from '../../config/axios';
+//IMAGENES Y CSS
+import logo from './../Img/Codebox-without-text.jpg';
 import "./Login.css";
-
+//COMPONENTES
+import Alert from '../includes/Alert';
+//CONTEXTO
 import AlertContext from "../../context/alerts/AlertContext";
 import AuthContext from "../../context/auth/AuthContext";
 
@@ -21,6 +24,7 @@ const Login = (props) => {
     if (message) {
       showAlert('cancel', '¡Error!', message);
     }
+    //eslint-disable-next-line
   }, [message]);
 
   useEffect(() => {
@@ -37,6 +41,7 @@ const Login = (props) => {
     return () => {
       clearTimeout(timer);
     };
+    //eslint-disable-next-line
   }, [alert]);
   
   const RespuestaGoogle = (respuesta) =>{
@@ -58,7 +63,7 @@ const Login = (props) => {
       <section className="login-container">
         <div className="login">
           <img src={logo} alt=""></img>
-          
+          <h1>Login CodeBox</h1>
           <GoogleLogin
             clientId={ process.env.REACT_APP_GOOGLE_CLIENT_ID }
             buttonText="Acceder con Google"

@@ -21,14 +21,11 @@ const ListadoVentas = () => {
     //Obtener purchases cuando cargue el componente
     useEffect(() => {
         const consultAPI = async () => {
-            //const url = 'https://code-box-api.herokuapp.com/api/ventas';
-    
             const results = await clientAxios.get('/ventas');
-
             getPurchases(results.data.purchases);
         }
-
         consultAPI();
+        //eslint-disable-next-line
     }, []);
 
     useEffect(() => {
@@ -39,19 +36,17 @@ const ListadoVentas = () => {
         return () => {
             clearTimeout(timer);
         };
+        //eslint-disable-next-line
     }, [alert]);
 
     //Obtener ventas cuando el valor del input o select del filtro cambien
     useEffect(() => {
         const consultAPI = async (fil, opt) => {
-            //const url = `https://code-box-api.herokuapp.com/api/ventas?${opt}=${fil}`;
-            
             const results = await clientAxios.get(`/ventas?${opt}=${fil}`);
-
             getPurchases(results.data.purchases);
         };
-
         consultAPI(filter, optionFilter);
+        //eslint-disable-next-line
     }, [filter, optionFilter]);
 
     const onChangeSelect = e => {
@@ -95,11 +90,6 @@ const ListadoVentas = () => {
                         <div className="card-header">
                             <h3>Información general</h3>
                             <div className="input-group">
-                                {/* <select>
-                                    <option>5</option>
-                                    <option>10</option>
-                                    <option>25</option>
-                                </select> */}
                                 <select id="option-filter" name="option-filter" onChange={ onChangeSelect }>
                                     <option value="idVenta">ID Venta</option>
                                     <option value="idCliente">ID Cliente</option>
@@ -136,8 +126,8 @@ const ListadoVentas = () => {
                                                         <td>{ purchase.client_id }</td>
                                                         <td>{ purchase.client_name }</td>
                                                         <td>
-                                                            <span className={ `tag-status ${ purchase.status == 'en proceso' ? 'pending' : purchase.status == 'entregada' ? 'paid' : 'cancelled' }` }>
-                                                                { purchase.status == 'en proceso' ? 'en proceso' : purchase.status == 'entregada' ? 'entregada' : 'cancelada' }
+                                                            <span className={ `tag-status ${ purchase.status === 'en proceso' ? 'pending' : purchase.status === 'entregada' ? 'paid' : 'cancelled' }` }>
+                                                                { purchase.status === 'en proceso' ? 'en proceso' : purchase.status === 'entregada' ? 'entregada' : 'cancelada' }
                                                             </span>
                                                         </td>
                                                         <td className="action">
@@ -156,13 +146,6 @@ const ListadoVentas = () => {
                                     }
                                 </tbody>
                             </table>
-                            {/* <div className="pagination">
-                                Mostrando de 1 a 8 de 100 entradas 
-                                <div className="pagination-links">
-                                    <a href="#" className="button button-pagination">Anterior</a>
-                                    <a href="#" className="button button-pagination">Siguiente</a>
-                                </div>
-                            </div> */}
                         </div>
                     </div>
                 </div>

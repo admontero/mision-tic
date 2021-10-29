@@ -1,10 +1,13 @@
 import React, { useReducer } from 'react';
 import ProductContext from './ProductContext';
 import ProductReducer from './ProductReducer';
+//HELPERS
+import clientAxios from '../../config/axios';
 
 import { 
     OBTENER_PRODUCTOS,
-    AGREGAR_PRODUCTO
+    OBTENER_PRODUCTOS_FILTRADOS,
+    AGREGAR_PRODUCTO,
 } from '../../types';
 
 const ProductState = props => {
@@ -19,10 +22,19 @@ const ProductState = props => {
     //Serie de funciones para el CRUD
 
     //Obtener productos
-    const getProducts = products => {
+    const getProducts = async () => {
+        const results = await clientAxios.get('/productos');
         dispatch({
             type: OBTENER_PRODUCTOS,
-            payload: products
+            payload: results.data.products
+        });
+    };
+
+    const getProductsFiltered = async (filter, option) => {
+        const results = await clientAxios.get(`/productos?${option}=${filter}`);
+        dispatch({
+            type: OBTENER_PRODUCTOS_FILTRADOS,
+            payload: results.data.products
         });
     };
 
@@ -37,7 +49,8 @@ const ProductState = props => {
             value={{
                 products: state.products,
                 getProducts,
-                addProduct
+                getProductsFiltered,
+                addProduct,
             }}
         >
             { props.children }

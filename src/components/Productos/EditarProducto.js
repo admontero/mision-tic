@@ -4,7 +4,6 @@ import AlertContext from "../../context/alerts/AlertContext";
 import { useHistory } from 'react-router-dom';
 import clientAxios from '../../config/axios';
 import Alert from '../includes/Alert';
-import './AgregarProducto.css';
 
 const EditarProducto = (props) => {
 
@@ -31,6 +30,7 @@ const EditarProducto = (props) => {
         return () => {
             clearTimeout(timer);
         };
+        //eslint-disable-next-line
     }, [alert]);
 
     let history = useHistory();
@@ -104,7 +104,7 @@ const EditarProducto = (props) => {
                                             id="status" 
                                             name="status" 
                                             onChange={ changeProduct }
-                                            defaultValue={ product.status == 'disponible' ? 'disponible' : 'no disponible' }
+                                            defaultValue={ product.status === 'disponible' ? 'disponible' : 'no disponible' }
                                         >
                                             <option>--SELECCIONE UNA OPCIÓN--</option>
                                             <option value="disponible">Disponible</option>

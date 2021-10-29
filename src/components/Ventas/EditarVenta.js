@@ -22,14 +22,11 @@ const EditarVenta = (props) => {
         ]);
 
         const consultAPI = async () => {
-            //const url = 'https://code-box-api.herokuapp.com/api/productos';
-    
             const results = await clientAxios.get('/productos');
-
             getProducts(results.data.products);
         }
-
         consultAPI();
+        //eslint-disable-next-line
     }, []);
     
     useEffect(() => {
@@ -40,6 +37,7 @@ const EditarVenta = (props) => {
         return () => {
             clearTimeout(timer);
         };
+        //eslint-disable-next-line
     }, [alert]);
 
     const [productTmp, setProductTmp] = useState({
@@ -87,7 +85,7 @@ const EditarVenta = (props) => {
             //return alert('El id, el precio y la cantidad del producto son requeridos');
         }
 
-        let result = products.filter(product => product._id == product_id);
+        let result = products.filter(product => product._id === product_id);
 
         if (result.length === 0) {
             closeAlert();
@@ -114,7 +112,7 @@ const EditarVenta = (props) => {
     };
 
     const deleteProduct = (id, e) => {
-        let newProducts = productsPurchased.filter(product => product.product_id != id);
+        let newProducts = productsPurchased.filter(product => product.product_id !== id);
         setProductsPurchased([
             ...newProducts
         ]);
@@ -133,7 +131,7 @@ const EditarVenta = (props) => {
 
     const fillForm = (id, e) => {
         //Obtenemos el producto a editar
-        let result = productsPurchased.filter(product => product.product_id == id);
+        let result = productsPurchased.filter(product => product.product_id === id);
         //Aplicamos destructuring al array resultado
         const [ productEdit ] = result;
         //Llenamos el state con la información del producto
@@ -227,7 +225,7 @@ const EditarVenta = (props) => {
                                             id="status" 
                                             name="status"
                                             onChange={ changePurchase }
-                                            defaultValue={ purchase.status == 'en proceso' ? 'en proceso' : purchase.status === 'entregada' ? 'entregada' : 'cancelada' }
+                                            defaultValue={ purchase.status === 'en proceso' ? 'en proceso' : purchase.status === 'entregada' ? 'entregada' : 'cancelada' }
                                         >
                                             <option>--SELECCIONE UNA OPCIÓN--</option>
                                             <option value="en proceso">En proceso</option>

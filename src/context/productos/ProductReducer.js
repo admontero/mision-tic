@@ -1,14 +1,13 @@
 import {  
     OBTENER_PRODUCTOS,
-    VALIDAR_FORMULARIO,
     AGREGAR_PRODUCTO,
-    MOSTRAR_ALERTA,
-    CERRAR_ALERTA,
+    OBTENER_PRODUCTOS_FILTRADOS,
 } from '../../types';
 
-export default (state, action) => {
+const ProductReducer = (state, action) => {
     switch(action.type) {
         case OBTENER_PRODUCTOS:
+            case OBTENER_PRODUCTOS_FILTRADOS:
             return {
                 ...state,
                 products: action.payload
@@ -22,3 +21,5 @@ export default (state, action) => {
             return state;
     }
 }
+
+export default ProductReducer;

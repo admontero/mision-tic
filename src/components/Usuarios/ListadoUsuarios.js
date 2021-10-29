@@ -4,7 +4,6 @@ import { Fragment, useContext, useEffect } from "react";
 import clientAxios from '../../config/axios';
 import { Link } from "react-router-dom";
 import Alert from "../includes/Alert";
-import './ListadoUsuarios.css';
 
 const ListadoUsuarios = () => {
 
@@ -17,14 +16,11 @@ const ListadoUsuarios = () => {
     //Obtener usuarios cuando cargue el componente
     useEffect(() => {
         const consultAPI = async () => {
-            //const url = 'https://code-box-api.herokuapp.com/api/usuarios';
-    
             const results = await clientAxios.get('/usuarios');
-
             getUsers(results.data.users);
         }
-
         consultAPI();
+        //eslint-disable-next-line
     }, []);
 
     useEffect(() => {
@@ -35,6 +31,7 @@ const ListadoUsuarios = () => {
         return () => {
             clearTimeout(timer);
         };
+        //eslint-disable-next-line
     }, [alert]);
 
     return ( 
@@ -90,19 +87,19 @@ const ListadoUsuarios = () => {
                                                         <td>{ user.name }</td>
                                                         <td className="role">{ user.role ? user.role : <b>No tiene rol</b> }</td>
                                                         <td>
-                                                            <span className={ `tag-status ${ user.status == 'pendiente' ? 'pending' : user.status == 'autorizado' ? 'paid' : 'cancelled' }` }>
-                                                                { user.status == 'pendiente' ? 'pendiente' : user.status == 'autorizado' ? 'autorizado' : 'no autorizado' }
+                                                            <span className={ `tag-status ${ user.status === 'pendiente' ? 'pending' : user.status === 'autorizado' ? 'paid' : 'cancelled' }` }>
+                                                                { user.status === 'pendiente' ? 'pendiente' : user.status === 'autorizado' ? 'autorizado' : 'no autorizado' }
                                                             </span>
                                                         </td>
                                                         <td className="action">
                                                             <Link 
-                                                                    to={{
-                                                                        pathname: `/usuarios/editar/${user._id}`,
-                                                                        state: user
-                                                                    }} 
-                                                                    className="editar">
-                                                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>   
-                                                                </Link>
+                                                                to={{
+                                                                    pathname: `/usuarios/editar/${user._id}`,
+                                                                    state: user
+                                                                }} 
+                                                                className="editar">
+                                                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>   
+                                                            </Link>
                                                         </td>
                                                     </tr>
                                                 )

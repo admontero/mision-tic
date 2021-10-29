@@ -4,7 +4,6 @@ import AlertContext from '../../context/alerts/AlertContext';
 import { useHistory } from 'react-router-dom';
 import clientAxios from '../../config/axios';
 import Alert from '../includes/Alert';
-import './AgregarProducto.css'
 
 const AgregarProducto = () => {
 
@@ -32,6 +31,7 @@ const AgregarProducto = () => {
         return () => {
             clearTimeout(timer);
         };
+        //eslint-disable-next-line
     }, [alert]);
 
     let history = useHistory();
