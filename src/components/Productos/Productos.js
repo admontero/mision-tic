@@ -63,6 +63,7 @@ const Productos = () => {
                                     products.map(product => {
                                         return (
                                             <Producto
+                                                key={ product._id }
                                                 product={ product }
                                             />
                                         )

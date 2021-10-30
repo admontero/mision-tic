@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 
 const Producto = ({ product }) => {
     return ( 
-        <tr key={ product._id }>
+        <tr>
             <td>{ product._id }</td>
             <td colSpan="2">{ product.description }</td>
             <td>{ product.price }</td>

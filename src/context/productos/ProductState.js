@@ -8,6 +8,7 @@ import {
     OBTENER_PRODUCTOS,
     OBTENER_PRODUCTOS_FILTRADOS,
     AGREGAR_PRODUCTO,
+    EDITAR_PRODUCTO,
 } from '../../types';
 
 const ProductState = props => {
@@ -38,9 +39,22 @@ const ProductState = props => {
         });
     };
 
-    const addProduct = () => {
+    const addProduct = async product => {
+        await clientAxios.post('/productos', product)
         dispatch({
-            type: AGREGAR_PRODUCTO
+            type: AGREGAR_PRODUCTO,
+            payload: product
+        });
+    };
+
+    const updateProduct = async (product, id) => {
+        await clientAxios.patch(`/productos/${id}`, product)
+        dispatch({
+            type: EDITAR_PRODUCTO,
+            payload: { 
+                productUpdated: product,
+                id: id
+            }
         });
     };
 
@@ -51,6 +65,7 @@ const ProductState = props => {
                 getProducts,
                 getProductsFiltered,
                 addProduct,
+                updateProduct
             }}
         >
             { props.children }
