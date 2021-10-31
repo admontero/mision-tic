@@ -1,15 +1,17 @@
-import ProductContext from "../../context/productos/ProductContext";
 import { Fragment, useState, useContext, useEffect } from 'react';
-import AlertContext from "../../context/alerts/AlertContext";
 import { useHistory } from 'react-router-dom';
-import clientAxios from '../../config/axios';
+//COMPONENTES
+import FormProductoVenta from './FormProductoVenta';
 import Alert from '../includes/Alert';
+//CONTEXTO
+import PurchaseContext from "../../context/ventas/PurchaseContext";
+import AlertContext from "../../context/alerts/AlertContext";
 
 const EditarVenta = (props) => {
 
     //Extraer productos del state inicial
-    const productsContext = useContext(ProductContext);
-    const { products, getProducts } = productsContext;
+    const purchasesContext = useContext(PurchaseContext);
+    const { updatePurchase } = purchasesContext;
 
     const alertsContext = useContext(AlertContext);
     const { alert, showAlert, closeAlert } = alertsContext;
@@ -20,12 +22,6 @@ const EditarVenta = (props) => {
         setProductsPurchased([
             ...props.location.state.products
         ]);
-
-        const consultAPI = async () => {
-            const results = await clientAxios.get('/productos');
-            getProducts(results.data.products);
-        }
-        consultAPI();
         //eslint-disable-next-line
     }, []);
 
@@ -34,8 +30,6 @@ const EditarVenta = (props) => {
         product_price: '',
         product_quantity: '',
     });
-
-    const { product_id, product_price, product_quantity } = productTmp;
     
     const [productsPurchased, setProductsPurchased] = useState([]);
 
@@ -56,47 +50,6 @@ const EditarVenta = (props) => {
         setPurchase({
             ...purchase,
             [e.target.name]: e.target.value
-        });
-    };
-
-    const changeProduct = e => {
-        setProductTmp({
-            ...productTmp,
-            [e.target.name]: e.target.value
-        });
-    }
-
-    const addProduct = () => {
-        
-        if (product_id.trim() === '' || product_price.trim() === '' || product_quantity.trim() === '') {
-            closeAlert();
-            return showAlert('cancel', '¡Error!', 'El id, el precio y la cantidad son requeridos');
-            //return alert('El id, el precio y la cantidad del producto son requeridos');
-        }
-
-        let result = products.filter(product => product._id === product_id);
-
-        if (result.length === 0) {
-            closeAlert();
-            return showAlert('cancel', '¡Error!', 'No existe un producto con este id');
-            //return alert('No hay productos con este id');
-        }
-
-        setProductTmp({
-            product_id: product_id,
-            product_price: product_price,
-            product_quantity: product_quantity,
-        });
-
-        setProductsPurchased([
-            ...productsPurchased,
-            productTmp
-        ]);
-
-        setProductTmp({
-            product_id: '',
-            product_price: '',
-            product_quantity: '',
         });
     };
 
@@ -129,22 +82,7 @@ const EditarVenta = (props) => {
         setEdit(true);
     };
 
-    const editProduct = () => {
-        //Actualizamos el producto
-        setProductsPurchased(
-            productsPurchased.map(product => product.product_id === productTmp.product_id ? productTmp : product)
-        );
-        //Limpiamos el estado del producto temporal
-        setProductTmp({
-            product_id: '',
-            product_price: '',
-            product_quantity: '',
-        });
-        //Cambiamos el botón
-        setEdit(false);
-    };
-
-    const updatePurchase = e => {
+    const submitPurchase = e => {
         e.preventDefault();
 
         //Validar formulario
@@ -157,8 +95,8 @@ const EditarVenta = (props) => {
         let purchaseFinal = { ...purchase, products: productsPurchased};
 
         //Actualizar venta
-        clientAxios.patch('/ventas/' + _id, purchaseFinal)
-            .then(res => {
+        updatePurchase(purchaseFinal, _id)
+            .then(() => {
                 showAlert('success', '¡Guardado!', 'Los cambios se han guardado con éxito');
                 history.push({
                     pathname: '/ventas'
@@ -181,7 +119,7 @@ const EditarVenta = (props) => {
             <section className="main-container">
                 <div className="cards">
                     <div className="card">
-                        <form method="POST" onSubmit={ updatePurchase }>
+                        <form method="POST" onSubmit={ submitPurchase }>
                             <div className="card-header">
                                 <h3>Editar Venta</h3>
                             </div>
@@ -248,59 +186,14 @@ const EditarVenta = (props) => {
                                 </div>
                                 <h3 className="label-info">Información de productos</h3>
                                 <div className="form-section">
-                                    <div className="form-group">
-                                        <label htmlFor="product_id">ID producto</label>
-                                        <input 
-                                            type="text" 
-                                            id="product_id" 
-                                            name="product_id"
-                                            onChange={ changeProduct }
-                                            value={ product_id }
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="product_quantity">Cantidad</label>
-                                        <input 
-                                            type="number" 
-                                            id="product_quantity" 
-                                            name="product_quantity"
-                                            onChange={ changeProduct }
-                                            value={ product_quantity }
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        <label htmlFor="product_price">Precio unitario</label>
-                                        <input 
-                                            type="number" 
-                                            id="product_price" 
-                                            name="product_price"
-                                            onChange={ changeProduct }
-                                            value={ product_price }
-                                        />
-                                    </div>
-                                    <div className="form-group">
-                                        {
-                                            edit
-                                            ?
-                                                <button 
-                                                    type="button" 
-                                                    className="button button-show"
-                                                    onClick={ editProduct }
-                                                >
-                                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
-                                                    Editar
-                                                </button>
-                                            :    
-                                            <button 
-                                                type="button" 
-                                                className="button button-add"
-                                                onClick={ addProduct }
-                                            >
-                                                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                                                Agregar
-                                            </button>
-                                        }
-                                    </div>
+                                    <FormProductoVenta
+                                        productTmp={ productTmp }
+                                        productsPurchased={ productsPurchased }
+                                        edit={ edit }
+                                        setProductTmp={ setProductTmp }
+                                        setProductsPurchased={ setProductsPurchased }
+                                        setEdit={ setEdit }
+                                    />
                                 </div>
                                 <table>
                                     <thead>

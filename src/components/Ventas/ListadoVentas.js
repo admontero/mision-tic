@@ -1,50 +1,17 @@
-import PurchaseContext from '../../context/ventas/PurchaseContext';
-import { Fragment, useContext, useEffect, useState } from "react";
-import AlertContext from "../../context/alerts/AlertContext";
-import clientAxios from '../../config/axios';
+import { Fragment, useContext } from "react";
 import { Link } from "react-router-dom";
+//COMPONENTES
 import Alert from "../includes/Alert";
+import Ventas from './Ventas';
+//CSS E IMAGENES
 import './ListadoVentas.css';
+//CONTEXTO
+import AlertContext from "../../context/alerts/AlertContext";
 
 const ListadoVentas = () => {
 
-    //Extraer ventas del state inicial
-    const purchasesContext = useContext(PurchaseContext);
-    const { purchases, getPurchases } = purchasesContext;
-
     const alertsContext = useContext(AlertContext);
     const { alert } = alertsContext;
-
-    const [optionFilter, setOptionFilter] = useState('idVenta');
-    const [filter, setFilter] = useState('');
-
-    //Obtener purchases cuando cargue el componente
-    useEffect(() => {
-        const consultAPI = async () => {
-            const results = await clientAxios.get('/ventas');
-            getPurchases(results.data.purchases);
-        }
-        consultAPI();
-        //eslint-disable-next-line
-    }, []);
-
-    //Obtener ventas cuando el valor del input o select del filtro cambien
-    useEffect(() => {
-        const consultAPI = async (fil, opt) => {
-            const results = await clientAxios.get(`/ventas?${opt}=${fil}`);
-            getPurchases(results.data.purchases);
-        };
-        consultAPI(filter, optionFilter);
-        //eslint-disable-next-line
-    }, [filter, optionFilter]);
-
-    const onChangeSelect = e => {
-        setOptionFilter(e.target.value);
-    };
-
-    const onChangeFilter = e => {
-        setFilter(e.target.value);
-    };
 
     return ( 
         <Fragment>
@@ -76,66 +43,7 @@ const ListadoVentas = () => {
                         </p>
                     </div>
                     <div className="card">
-                        <div className="card-header">
-                            <h3>Información general</h3>
-                            <div className="input-group">
-                                <select id="option-filter" name="option-filter" onChange={ onChangeSelect }>
-                                    <option value="idVenta">ID Venta</option>
-                                    <option value="idCliente">ID Cliente</option>
-                                    <option value="nameCliente">Nombre Cliente</option>
-                                </select>
-                                <input type="search" placeholder="Buscar..." onChange={ onChangeFilter }></input>
-                            </div>
-                        </div>
-                        <div className="card-body">
-                            <table>
-                                <thead>
-                                    <tr>
-                                        <th>Id venta</th>
-                                        <th>Id cliente</th>
-                                        <th>Nombre cliente</th>
-                                        <th>Estado</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {
-                                        purchases.length === 0
-                                        ?
-                                            <tr>
-                                                <td colSpan="5" className="empty">
-                                                    No hay ventas registradas en el sistema
-                                                </td>  
-                                            </tr>
-                                        :
-                                            purchases.map(purchase => {
-                                                return (
-                                                    <tr key={ purchase._id }>
-                                                        <td>{ purchase._id }</td>
-                                                        <td>{ purchase.client_id }</td>
-                                                        <td>{ purchase.client_name }</td>
-                                                        <td>
-                                                            <span className={ `tag-status ${ purchase.status === 'en proceso' ? 'pending' : purchase.status === 'entregada' ? 'paid' : 'cancelled' }` }>
-                                                                { purchase.status === 'en proceso' ? 'en proceso' : purchase.status === 'entregada' ? 'entregada' : 'cancelada' }
-                                                            </span>
-                                                        </td>
-                                                        <td className="action">
-                                                            <Link 
-                                                                    to={{
-                                                                        pathname: `/ventas/editar/${purchase._id}`,
-                                                                        state: purchase
-                                                                    }} 
-                                                                    className="editar">
-                                                                    <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"></path></svg>   
-                                                                </Link>
-                                                        </td>
-                                                    </tr>
-                                                )
-                                            })
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
+                        <Ventas />
                     </div>
                 </div>
             </section>
