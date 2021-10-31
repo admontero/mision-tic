@@ -13,7 +13,7 @@ const ListadoVentas = () => {
     const { purchases, getPurchases } = purchasesContext;
 
     const alertsContext = useContext(AlertContext);
-    const { alert, closeAlert } = alertsContext;
+    const { alert } = alertsContext;
 
     const [optionFilter, setOptionFilter] = useState('idVenta');
     const [filter, setFilter] = useState('');
@@ -27,17 +27,6 @@ const ListadoVentas = () => {
         consultAPI();
         //eslint-disable-next-line
     }, []);
-
-    useEffect(() => {
-        let timer = setTimeout(() => {
-            closeAlert();
-        }, 5000);
-
-        return () => {
-            clearTimeout(timer);
-        };
-        //eslint-disable-next-line
-    }, [alert]);
 
     //Obtener ventas cuando el valor del input o select del filtro cambien
     useEffect(() => {

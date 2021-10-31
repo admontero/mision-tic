@@ -28,17 +28,6 @@ const EditarVenta = (props) => {
         consultAPI();
         //eslint-disable-next-line
     }, []);
-    
-    useEffect(() => {
-        let timer = setTimeout(() => {
-            closeAlert();
-        }, 5000);
-
-        return () => {
-            clearTimeout(timer);
-        };
-        //eslint-disable-next-line
-    }, [alert]);
 
     const [productTmp, setProductTmp] = useState({
         product_id: '',

@@ -1,8 +1,10 @@
-import React, {Fragment, useState, useEffect, useContext} from 'react';
-import AlertContext from "../../context/alerts/AlertContext";
-import clientAxios from '../../config/axios';
+import React, {Fragment, useState, useContext} from 'react';
 import { useHistory } from 'react-router';
+//COMPONENTS
 import Alert from '../includes/Alert';
+//CONTEXT
+import AlertContext from "../../context/alerts/AlertContext";
+import UserContext from '../../context/usuarios/UserContext';
 
 const EditarUsuario = (props) => {
 
@@ -10,23 +12,15 @@ const EditarUsuario = (props) => {
     const alertsContext = useContext(AlertContext);
     const { alert, showAlert, closeAlert } = alertsContext;
 
+    const usersContext = useContext(UserContext);
+    const { updateUser } = usersContext;
+
     const { role, status, _id } = props.location.state;
     
     const [user, setUser] = useState({
         role: role,
         status: status.toString(),
     });
-
-    useEffect(() => {
-        let timer = setTimeout(() => {
-            closeAlert();
-        }, 5000);
-
-        return () => {
-            clearTimeout(timer);
-        };
-        //eslint-disable-next-line
-    }, [alert]);
 
     let history = useHistory();
 
@@ -38,7 +32,7 @@ const EditarUsuario = (props) => {
         });
     };
 
-    const updateUser = e => {
+    const submitForm = e => {
         e.preventDefault();
 
         //Validar formulario
@@ -49,8 +43,8 @@ const EditarUsuario = (props) => {
         }
 
         //Actualizar usuario
-        clientAxios.patch(`/usuarios/${_id}`, user)
-            .then(res => {
+        updateUser(user, _id)
+            .then(() => {
                 showAlert('success', '¡Guardado!', 'Los cambios se han guardado con éxito');
                 history.push({
                     pathname: '/usuarios'
@@ -74,7 +68,7 @@ const EditarUsuario = (props) => {
             <section className="main-container">
                 <div className="cards">
                     <div className="card">
-                        <form method="POST" onSubmit={ updateUser }>
+                        <form method="POST" onSubmit={ submitForm }>
                             <div className="card-header">
                                 <h3>Editar Usuario</h3>
                             </div>

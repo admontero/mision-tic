@@ -1,5 +1,6 @@
 import { Fragment, useContext, useEffect } from 'react';
 import GoogleLogin from 'react-google-login';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
 //HELPERS
 import clientAxios from '../../config/axios';
 //IMAGENES Y CSS
@@ -32,17 +33,6 @@ const Login = (props) => {
       props.history.push('/ventas');
     }
   }, [authenticated, error, props.history]);
-
-  useEffect(() => {
-    let timer = setTimeout(() => {
-      closeAlert();
-    }, 5000);
-
-    return () => {
-      clearTimeout(timer);
-    };
-    //eslint-disable-next-line
-  }, [alert]);
   
   const RespuestaGoogle = (respuesta) =>{
     clientAxios.post('auth', { tokenId: respuesta.tokenId })
@@ -62,7 +52,9 @@ const Login = (props) => {
       }
       <section className="login-container">
         <div className="login">
-          <img src={logo} alt=""></img>
+          <LazyLoadImage 
+            src={ logo } 
+            alt="Logo de caja con etiqueta de precio dentro" />
           <h1>Login CodeBox</h1>
           <GoogleLogin
             clientId={ process.env.REACT_APP_GOOGLE_CLIENT_ID }

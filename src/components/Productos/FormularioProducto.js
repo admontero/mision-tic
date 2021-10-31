@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useContext } from "react";
+import { Fragment, useContext } from "react";
 import { useHistory } from 'react-router-dom';
 //CONTEXT
 import ProductContext from '../../context/productos/ProductContext';
@@ -16,17 +16,6 @@ const FormularioProducto = (props) => {
     const { alert, showAlert, closeAlert } = alertsContext;
 
     let history = useHistory();
-
-    useEffect(() => {
-        let timer = setTimeout(() => {
-            closeAlert();
-        }, 5000);
-
-        return () => {
-            clearTimeout(timer);
-        };
-        //eslint-disable-next-line
-    }, [alert]);
 
     //EVENTOS
     const changeProduct = e => {

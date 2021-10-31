@@ -1,8 +1,13 @@
 import React, { useReducer } from 'react';
+//CONTEXTO
 import UserContext from './UserContext';
+//REDUCER
 import UserReducer from './UserReducer';
-
+//HELPERS
+import clientAxios from '../../config/axios';
+//EVENTOS
 import { 
+    EDITAR_USUARIO,
     OBTENER_USUARIOS
 } from '../../types';
 
@@ -18,10 +23,23 @@ const UserState = props => {
     //Serie de funciones para el CRUD
 
     //Obtener usuarios
-    const getUsers = users => {
+    const getUsers = async () => {
+        const result = await clientAxios.get('/usuarios');
         dispatch({
             type: OBTENER_USUARIOS,
-            payload: users
+            payload: result.data.users
+        });
+    };
+
+    //Editar usuario
+    const updateUser = async (user, id) => {
+        await clientAxios.patch(`/usuarios/${id}`, user);
+        dispatch({
+            type: EDITAR_USUARIO,
+            payload: {
+                userUpdated: user,
+                id: id
+            }
         });
     };
 
@@ -29,7 +47,8 @@ const UserState = props => {
         <UserContext.Provider
             value={{
                 users: state.users,
-                getUsers
+                getUsers,
+                updateUser
             }}
         >
             { props.children }

@@ -26,6 +26,14 @@ const AlertState = props => {
                 msg
             }
         });
+
+        let timer = setTimeout(() => {
+            closeAlert();
+        }, 5000);
+
+        return () => {
+            clearTimeout(timer);
+        };
     };
 
     //Cerrar alerta

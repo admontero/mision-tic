@@ -16,13 +16,11 @@ const ProductReducer = (state, action) => {
         case AGREGAR_PRODUCTO:
             return {
                 ...state,
-                errorform: false,
                 products: [...state.products, action.payload]
             }
         case EDITAR_PRODUCTO:
             return {
                 ...state,
-                errorform: false,
                 products: state.products.map(product => product._id === action.payload.id 
                     ? action.payload.productUpdated : product)
             }

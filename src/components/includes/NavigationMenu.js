@@ -1,8 +1,11 @@
 import React, { useState, useContext, Fragment } from 'react';
-import AuthContext from '../../context/auth/AuthContext';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import { Link } from 'react-router-dom';
+//CSS E IMAGENES
 import './NavigationMenu.css';
 import logo from './../Img/Codebox.jpg';
-import { Link } from 'react-router-dom';
+//CONTEXTO
+import AuthContext from '../../context/auth/AuthContext';
 
 const NavigationMenu = () => {
 
@@ -16,7 +19,10 @@ const NavigationMenu = () => {
             <div className="container-nav">
                 <div className="logo">
                     <Link to="/">
-                        <img src={ logo } alt="Logo de una caja con etiqueta dentro" />
+                        <LazyLoadImage 
+                            src={ logo } 
+                            alt="Logo de una caja con etiqueta dentro con texto CodeBox" 
+                        />
                     </Link>
                 </div>
 
@@ -31,6 +37,9 @@ const NavigationMenu = () => {
                                     <Fragment>
                                         <Link to="/productos">Productos</Link>
                                         <Link to="/usuarios">Usuarios</Link>
+                                        <button className="close-session" onClick={ () => closeSession() }>
+                                            Cerrar Sesión
+                                        </button>
                                     </Fragment>
                                 :
                                     null

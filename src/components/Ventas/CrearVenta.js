@@ -25,17 +25,6 @@ const CrearVenta = () => {
         //eslint-disable-next-line
     }, []);
 
-    useEffect(() => {
-        let timer = setTimeout(() => {
-            closeAlert();
-        }, 5000);
-
-        return () => {
-            clearTimeout(timer);
-        };
-        //eslint-disable-next-line
-    }, [alert]);
-
     let history = useHistory();
 
     const [purchase, setPurchase] = useState({
@@ -62,7 +51,6 @@ const CrearVenta = () => {
     const [edit, setEdit] = useState(false);
 
     //EVENTOS
-
     const changePurchase = e => {
         setPurchase({
             ...purchase,
