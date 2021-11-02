@@ -1,24 +1,12 @@
-import { Fragment, useContext } from "react";
+import { Fragment } from "react";
 //COMPONENTES
 import Alert from "../includes/Alert";
 import Usuarios from "./Usuarios";
-//CONTEXTO
-import AlertContext from "../../context/alerts/AlertContext";
 
 const ListadoUsuarios = () => {
-
-    const alertsContext = useContext(AlertContext);
-    const { alert } = alertsContext;
-
     return ( 
         <Fragment>
-            {
-                alert
-                ? 
-                    <Alert alertType={ alert.type } alertHeader={ alert.title } alertBody={ alert.msg } />
-                :
-                    null
-            }
+            <Alert />
             <section className="main-container">
                 <div className="cards">
                     <div className="card card-caption">

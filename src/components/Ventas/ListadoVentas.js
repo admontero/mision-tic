@@ -1,31 +1,13 @@
-import { Fragment, useContext } from "react";
+import { Fragment } from "react";
 import { Link } from "react-router-dom";
 //COMPONENTES
 import Alert from "../includes/Alert";
 import Ventas from './Ventas';
-//CSS E IMAGENES
-import './ListadoVentas.css';
-//CONTEXTO
-import AlertContext from "../../context/alerts/AlertContext";
 
 const ListadoVentas = () => {
-
-    const alertsContext = useContext(AlertContext);
-    const { alert } = alertsContext;
-
     return ( 
         <Fragment>
-            {
-                alert
-                ? 
-                    <Alert 
-                        alertType={ alert.type }
-                        alertHeader={ alert.title } 
-                        alertBody={ alert.msg } 
-                    />
-                :
-                    null
-            }
+            <Alert />
             <section className="main-container">
                 <div className="cards">
                     <div className="card card-caption">

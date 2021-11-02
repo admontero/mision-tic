@@ -13,7 +13,7 @@ const FormularioProducto = (props) => {
     const { addProduct, updateProduct } = productsContext;
 
     const alertsContext = useContext(AlertContext);
-    const { alert, showAlert, closeAlert } = alertsContext;
+    const { showAlert } = alertsContext;
 
     let history = useHistory();
 
@@ -31,7 +31,6 @@ const FormularioProducto = (props) => {
         //Validar formulario
         if ( props.product._id.trim() === '' || props.product.price.trim() === '' || 
             props.product.status.trim() === '' || props.product.description.trim() === '') {
-            closeAlert();
             showAlert('cancel', '¡Error!', 'Todos los campos son requeridos');
             return ;
         }
@@ -50,7 +49,6 @@ const FormularioProducto = (props) => {
         //Validar formulario
         if (props.product.price.trim() === '' || props.product.status.trim() === '' || 
             props.product.description.trim() === '') {
-            closeAlert();
             showAlert('cancel', '¡Error!', 'Todos los campos son requeridos');
             return ;
         }
@@ -63,11 +61,9 @@ const FormularioProducto = (props) => {
         });
     }
 
-    const alerta = alert ? <Alert alertType={ alert.type } alertHeader={ alert.title } alertBody={ alert.msg } />  : null;
-
     return ( 
         <Fragment>
-            { alerta }
+            <Alert />
             <form method="POST" onSubmit={ props.id ? editProduct : createProduct }>
                 <div className="card-header">
                     <h3>{ props.id ? 'Edición de Producto' : 'Registro de Producto' }</h3>

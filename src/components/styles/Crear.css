@@ -66,11 +66,16 @@
 .card-footer {
     display: flex;
     justify-content: flex-end;
+    align-items: center;
     padding: 1rem 1rem;
     font-family: 'Maven Pro', sans-serif;
     font-size: 1.125rem;
     font-weight: 600;
     line-height: 1.75rem;
+}
+
+.card-footer p {
+    margin-right: 1rem;
 }
 
 hr {

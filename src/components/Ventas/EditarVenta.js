@@ -1,4 +1,4 @@
-import { Fragment, useState, useContext, useEffect } from 'react';
+import { Fragment, useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 //COMPONENTES
 import FormProductoVenta from './FormProductoVenta';
@@ -6,6 +6,8 @@ import Alert from '../includes/Alert';
 //CONTEXTO
 import PurchaseContext from "../../context/ventas/PurchaseContext";
 import AlertContext from "../../context/alerts/AlertContext";
+//HELPERS
+import calculateTotal from '../../config/calculateTotal';
 
 const EditarVenta = (props) => {
 
@@ -14,7 +16,7 @@ const EditarVenta = (props) => {
     const { updatePurchase } = purchasesContext;
 
     const alertsContext = useContext(AlertContext);
-    const { alert, showAlert, closeAlert } = alertsContext;
+    const { showAlert } = alertsContext;
     
     const { _id, date, total, status, client_id, client_name } = props.location.state;
     
@@ -86,9 +88,8 @@ const EditarVenta = (props) => {
         e.preventDefault();
 
         //Validar formulario
-        if (purchase.date.trim() === '' || purchase.total.trim() === '' || purchase.status.trim() === '' 
-            || purchase.client_id.trim() === '' || purchase.client_name.trim() === '' || productsPurchased.length === 0) {
-            closeAlert();
+        if (purchase.date.trim() === '' || purchase.status.trim() === '' || purchase.client_id.trim() === '' 
+            || purchase.client_name.trim() === '' || productsPurchased.length === 0) {
             return showAlert('cancel', '¡Error!', 'Todos los campos son requeridos');
         }
 
@@ -107,15 +108,24 @@ const EditarVenta = (props) => {
             });
     };
 
+    useEffect(() => {
+        if (productsPurchased.length > 0) {
+            setPurchase({
+                ...purchase,
+                total: calculateTotal(productsPurchased)
+            });
+        } else {
+            setPurchase({
+                ...purchase,
+                total: ''
+            });
+        }
+        //eslint-disable-next-line
+    }, [productsPurchased]);
+
     return (
         <Fragment>
-            {
-                alert
-                ?
-                    <Alert alertType={ alert.type } alertHeader={ alert.title } alertBody={ alert.msg } />
-                :
-                    ''
-            }
+            <Alert />
             <section className="main-container">
                 <div className="cards">
                     <div className="card">
@@ -136,7 +146,7 @@ const EditarVenta = (props) => {
                                             value={ purchase.date }
                                         />
                                     </div>
-                                    <div className="form-group">
+                                   {/*  <div className="form-group">
                                         <label htmlFor="total">Valor total</label>
                                         <input 
                                             type="number" 
@@ -145,7 +155,7 @@ const EditarVenta = (props) => {
                                             onChange={ changePurchase }
                                             value={ purchase.total }
                                         />
-                                    </div>
+                                    </div> */}
                                     <div className="form-group">
                                         <label htmlFor="status">Estado</label>
                                         <select 
@@ -193,6 +203,7 @@ const EditarVenta = (props) => {
                                         setProductTmp={ setProductTmp }
                                         setProductsPurchased={ setProductsPurchased }
                                         setEdit={ setEdit }
+                                        showAlert={ showAlert }
                                     />
                                 </div>
                                 <table>
@@ -245,6 +256,7 @@ const EditarVenta = (props) => {
                             </div>
                             <hr />
                             <div className="card-footer">
+                                <p className="total">Total Venta: { purchase.total ? purchase.total : 0 }</p>
                                 <button type="submit" className="button button-new">
                                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
                                     Guardar cambios

@@ -1,6 +1,4 @@
-//import logo from './logo.svg';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
-import "./App.css";
 import Login from "./../Login/Login";
 import NavigationMenu from "../includes/NavigationMenu";
 import ListadoVentas from "../Ventas/ListadoVentas";
@@ -20,6 +18,12 @@ import AuthState from '../../context/auth/AuthState';
 
 import PrivateRoute from "../routes/PrivateRoute";
 import tokenAuth from "../../config/token";
+//CSS E IMAGENES
+import "./App.css";
+import "../styles/Login.css";
+import "../styles/Listar.css";
+import "../styles/Crear.css";
+import "../styles/Editar.css";
 
 //Revisar si tenemos un token
 const token = localStorage.getItem('token');

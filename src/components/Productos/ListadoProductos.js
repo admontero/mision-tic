@@ -1,41 +1,13 @@
-import { Fragment, useContext, useEffect } from "react";
+import { Fragment } from "react";
 import { Link } from "react-router-dom";
 //COMPONENTES
 import Productos from "./Productos";
 import Alert from "../includes/Alert";
-//CONTEXTO
-import AlertContext from "../../context/alerts/AlertContext";
 
 const ListadoProductos = () => {
-
-    //Extraer productos del state inicial
-    const alertsContext = useContext(AlertContext);
-    const { alert, closeAlert } = alertsContext;
-
-    useEffect(() => {
-        let timer = setTimeout(() => {
-            closeAlert();
-        }, 5000);
-
-        return () => {
-            clearTimeout(timer);
-        };
-        //eslint-disable-next-line
-    }, [alert]);
-
     return ( 
         <Fragment>
-            {
-                alert
-                ? 
-                    <Alert 
-                        alertType={ alert.type }
-                        alertHeader={ alert.title } 
-                        alertBody={ alert.msg } 
-                    />
-                :
-                    null
-            }
+            <Alert />
             <section className="main-container">
                 <div className="cards">
                     <div className="card card-caption">

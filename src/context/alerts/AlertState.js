@@ -1,4 +1,4 @@
-import React, { useReducer } from 'react';
+import React, { useEffect, useReducer } from 'react';
 import AlertContext from './AlertContext';
 import AlertReducer from './AlertReducer';
 
@@ -20,13 +20,18 @@ const AlertState = props => {
     const showAlert = (type, title, msg) => {
         dispatch({
             type: MOSTRAR_ALERTA,
-            payload: {
-                type,
-                title,
-                msg
-            }
+            payload: { type, title, msg }
         });
+    };
 
+    //Cerrar alerta
+    const closeAlert = () => {
+        dispatch({
+            type: CERRAR_ALERTA
+        });
+    };
+
+    useEffect(() => {
         let timer = setTimeout(() => {
             closeAlert();
         }, 5000);
@@ -34,14 +39,7 @@ const AlertState = props => {
         return () => {
             clearTimeout(timer);
         };
-    };
-
-    //Cerrar alerta
-    const closeAlert = () => {
-        dispatch({
-            type: CERRAR_ALERTA
-        })
-    };
+    }, [state.alert]);
 
     return (
         <AlertContext.Provider

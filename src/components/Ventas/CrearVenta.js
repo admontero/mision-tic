@@ -1,13 +1,14 @@
-import { Fragment, useState, useContext } from 'react';
+import { Fragment, useState, useEffect, useContext } from 'react';
 import { useHistory } from 'react-router-dom';
 //COMPONENTES
 import FormProductoVenta from './FormProductoVenta';
 import Alert from '../includes/Alert';
-//CSS E IMAGENES
-import './CrearVenta.css';
 //CONTEXTO
 import PurchaseContext from '../../context/ventas/PurchaseContext';
+import AuthContext from '../../context/auth/AuthContext';
 import AlertContext from '../../context/alerts/AlertContext';
+//HELPERS
+import calculateTotal from '../../config/calculateTotal';
 
 const CrearVenta = () => {
 
@@ -15,8 +16,11 @@ const CrearVenta = () => {
     const purchasesContext = useContext(PurchaseContext);
     const { addPurchase } = purchasesContext;
 
+    const authsContext = useContext(AuthContext);
+    const { user } = authsContext;
+
     const alertsContext = useContext(AlertContext);
-    const { alert, showAlert, closeAlert } = alertsContext;
+    const { showAlert } = alertsContext;
 
     let history = useHistory();
 
@@ -27,9 +31,10 @@ const CrearVenta = () => {
         status: '',
         client_id: '',
         client_name: '',
+        seller_id: ''
     });
 
-    const { _id, date, total, status, client_id, client_name } = purchase;
+    const { _id, date, status, client_id, client_name, seller_id } = purchase;
     
     const [productTmp, setProductTmp] = useState({
         product_id: '',
@@ -40,6 +45,14 @@ const CrearVenta = () => {
     const [productsPurchased, setProductsPurchased] = useState([]);
 
     const [edit, setEdit] = useState(false);
+
+    useEffect(() => {
+        setPurchase({
+            ...purchase,
+            seller_id: user._id
+        });
+        //eslint-disable-next-line
+    }, []);
 
     //EVENTOS
     const changePurchase = e => {
@@ -82,16 +95,15 @@ const CrearVenta = () => {
 
     const submitPurchase = e => {
         e.preventDefault();
-
+        
         //Validar formulario
-        if (_id.trim() === '' || date.trim() === '' || total.trim() === '' || status.trim() === '' 
-            || client_id.trim() === '' || client_name.trim() === '' || productsPurchased.length === 0) {
-            closeAlert();
+        if (_id.trim() === '' || date.trim() === '' || status.trim() === '' || client_id.trim() === '' 
+            || client_name.trim() === '' || seller_id.trim() === '' || productsPurchased.length === 0) {
             return showAlert('cancel', '¡Error!', 'Todos los campos son requeridos');
         }
 
-        let purchaseFinal = { ...purchase, products: productsPurchased};
-
+        let purchaseFinal = { ...purchase, products: productsPurchased };
+        
         //Crear venta
         addPurchase(purchaseFinal)
             .then(() => {
@@ -101,20 +113,28 @@ const CrearVenta = () => {
                 });
             })
             .catch(err => {
-                closeAlert();
                 showAlert('cancel', '¡Error!', err.response.data.msg);
             });
     };
 
+    useEffect(() => {
+        if (productsPurchased.length > 0) {
+            setPurchase({
+                ...purchase,
+                total: calculateTotal(productsPurchased)
+            });
+        } else {
+            setPurchase({
+                ...purchase,
+                total: ''
+            });
+        }
+        //eslint-disable-next-line
+    }, [productsPurchased]);
+
     return (
         <Fragment>
-            {
-                alert
-                ?
-                    <Alert alertType={ alert.type } alertHeader={ alert.title } alertBody={ alert.msg } />
-                :
-                    null
-            }
+            <Alert />
             <section className="main-container">
                 <div className="cards">
                     <div className="card">
@@ -145,7 +165,7 @@ const CrearVenta = () => {
                                             value={ date }
                                         />
                                     </div>
-                                    <div className="form-group">
+                                    {/* <div className="form-group">
                                         <label htmlFor="total">Valor total</label>
                                         <input 
                                             type="number" 
@@ -154,7 +174,7 @@ const CrearVenta = () => {
                                             onChange={ changePurchase }
                                             value={ total }
                                         />
-                                    </div>
+                                    </div> */}
                                     <div className="form-group">
                                         <label htmlFor="status">Estado</label>
                                         <select 
@@ -202,7 +222,6 @@ const CrearVenta = () => {
                                         setProductsPurchased={ setProductsPurchased }
                                         setEdit={ setEdit }
                                         showAlert={ showAlert }
-                                        closeAlert={ closeAlert }
                                     />
                                 </div>
                                 <table>
@@ -255,6 +274,7 @@ const CrearVenta = () => {
                             </div>
                             <hr />
                             <div className="card-footer">
+                                <p className="total">Total Venta: { purchase.total ? purchase.total : 0 }</p>
                                 <button type="submit" className="button button-new">
                                     <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
                                     Guardar Venta

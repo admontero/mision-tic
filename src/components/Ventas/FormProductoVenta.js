@@ -2,7 +2,7 @@ import { Fragment, useEffect, useContext } from "react";
 //CONTEXTO
 import ProductContext from "../../context/productos/ProductContext";
 
-const FormProductoVenta = ({ edit, productTmp, productsPurchased, setEdit, setProductTmp, setProductsPurchased, showAlert, closeAlert }) => {
+const FormProductoVenta = ({ edit, productTmp, productsPurchased, setEdit, setProductTmp, setProductsPurchased, showAlert }) => {
 
     const productsContext = useContext(ProductContext);
     const { products, getProducts } = productsContext;
@@ -25,15 +25,13 @@ const FormProductoVenta = ({ edit, productTmp, productsPurchased, setEdit, setPr
     const addProduct = () => {
         
         if (product_id.trim() === '' || product_price.trim() === '' || product_quantity.trim() === '') {
-            closeAlert();
-            return showAlert('cancel', '¡Error!', 'El id, el precio y la cantidad son requeridos');
+            return showAlert('cancel', '¡Error!', 'La información del producto es requerida');
             //return alert('El id, el precio y la cantidad del producto son requeridos');
         }
 
         let result = products.filter(product => product._id === product_id);
 
         if (result.length === 0) {
-            closeAlert();
             return showAlert('cancel', '¡Error!', 'No existe un producto con este id');
             //return alert('No hay productos con este id');
         }
@@ -66,7 +64,6 @@ const FormProductoVenta = ({ edit, productTmp, productsPurchased, setEdit, setPr
         //Cambiamos el botón
         setEdit(false);
     };
-
 
     return ( 
         <Fragment>

@@ -13,7 +13,7 @@ const AuthReducer = (state, action) => {
                 ...state,
                 authenticated: true,
                 user: action.payload.user,
-                message: null
+                alert: null
             }
         case OBTENER_USUARIO:
             return {
@@ -31,7 +31,7 @@ const AuthReducer = (state, action) => {
                 user: null,
                 authenticated: null,
                 error: true,
-                message: action.payload
+                alert: action.payload
             }
         default: 
             return state;

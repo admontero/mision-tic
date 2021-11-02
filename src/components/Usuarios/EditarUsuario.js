@@ -10,7 +10,7 @@ const EditarUsuario = (props) => {
 
     //HOOKS AND DESTRUCTURING
     const alertsContext = useContext(AlertContext);
-    const { alert, showAlert, closeAlert } = alertsContext;
+    const { showAlert } = alertsContext;
 
     const usersContext = useContext(UserContext);
     const { updateUser } = usersContext;
@@ -37,7 +37,6 @@ const EditarUsuario = (props) => {
 
         //Validar formulario
         if (user.status.trim() === '') {
-            closeAlert();
             showAlert('cancel', '¡Error!', 'El campo estado es requerido');
             return ;
         }
@@ -51,20 +50,13 @@ const EditarUsuario = (props) => {
                 });
             })
             .catch(err => {
-                closeAlert();
                 showAlert('cancel', '¡Error!', err.response.data.msg);
             });
     };
 
     return ( 
         <Fragment>
-            {
-                alert
-                ?
-                    <Alert alertType={ alert.type } alertHeader={ alert.title } alertBody={ alert.msg } />
-                :
-                    null
-            }
+            <Alert />
             <section className="main-container">
                 <div className="cards">
                     <div className="card">

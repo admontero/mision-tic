@@ -5,7 +5,6 @@ import { LazyLoadImage } from 'react-lazy-load-image-component';
 import clientAxios from '../../config/axios';
 //IMAGENES Y CSS
 import logo from './../Img/Codebox-without-text.jpg';
-import "./Login.css";
 //COMPONENTES
 import Alert from '../includes/Alert';
 //CONTEXTO
@@ -15,18 +14,17 @@ import AuthContext from "../../context/auth/AuthContext";
 const Login = (props) => {
 
   const authsContext = useContext(AuthContext);
-  const { message, authenticated, error, startSession } = authsContext;
+  const { alert, authenticated, error, startSession } = authsContext;
 
   const alertsContext = useContext(AlertContext);
-  const { alert, showAlert, closeAlert } = alertsContext;
+  const { showAlert } = alertsContext;
 
   useEffect(() => {
-    closeAlert();
-    if (message) {
-      showAlert('cancel', '¡Error!', message);
+    if (alert) {
+      showAlert(alert.type, alert.title, alert.msg);
     }
     //eslint-disable-next-line
-  }, [message]);
+  }, [alert]);
 
   useEffect(() => {
     if (authenticated && !error) {
@@ -43,18 +41,13 @@ const Login = (props) => {
 
   return (
     <Fragment>
-      {
-        alert 
-        ?
-          <Alert alertType={ alert.type } alertHeader={ alert.title } alertBody={ alert.msg } />
-        :
-          null
-      }
+      <Alert />
       <section className="login-container">
         <div className="login">
           <LazyLoadImage 
             src={ logo } 
-            alt="Logo de caja con etiqueta de precio dentro" />
+            alt="Logo de caja con etiqueta de precio dentro" 
+          />
           <h1>Login CodeBox</h1>
           <GoogleLogin
             clientId={ process.env.REACT_APP_GOOGLE_CLIENT_ID }

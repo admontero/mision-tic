@@ -13,7 +13,7 @@ const AlertReducer = (state, action) => {
             case CERRAR_ALERTA:
                 return {
                     ...state,
-                    alert: null,
+                    alert: null
                 }
         default: 
             return state;
