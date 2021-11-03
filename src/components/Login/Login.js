@@ -1,15 +1,16 @@
 import { Fragment, useContext, useEffect } from 'react';
+import { useHistory } from "react-router-dom";
 import GoogleLogin from 'react-google-login';
 import { LazyLoadImage } from 'react-lazy-load-image-component';
-//HELPERS
-import clientAxios from '../../config/axios';
-//IMAGENES Y CSS
-import logo from './../Img/Codebox-without-text.jpg';
 //COMPONENTES
 import Alert from '../includes/Alert';
 //CONTEXTO
 import AlertContext from "../../context/alerts/AlertContext";
 import AuthContext from "../../context/auth/AuthContext";
+//HELPERS
+import clientAxios from '../../config/axios';
+//IMAGENES Y CSS
+import logo from './../Img/Codebox-without-text.jpg';
 
 const Login = (props) => {
 
@@ -18,6 +19,8 @@ const Login = (props) => {
 
   const alertsContext = useContext(AlertContext);
   const { showAlert } = alertsContext;
+
+  let history = useHistory();
 
   useEffect(() => {
     if (alert) {
@@ -28,9 +31,11 @@ const Login = (props) => {
 
   useEffect(() => {
     if (authenticated && !error) {
-      props.history.push('/ventas');
+      !props.location.state
+        ? history.push('/ventas') 
+        : history.push(props.location.state.route);
     }
-  }, [authenticated, error, props.history]);
+  }, [authenticated, error, history, props]);
   
   const RespuestaGoogle = (respuesta) =>{
     clientAxios.post('auth', { tokenId: respuesta.tokenId })

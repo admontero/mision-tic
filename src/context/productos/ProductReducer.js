@@ -3,10 +3,35 @@ import {
     AGREGAR_PRODUCTO,
     OBTENER_PRODUCTOS_FILTRADOS,
     EDITAR_PRODUCTO,
+    SELECCIONAR_PRODUCTO,
+    LISTANDO_PRODUCTO,
+    CREANDO_PRODUCTO,
+    EDITANDO_PRODUCTO,
 } from '../../types';
 
 const ProductReducer = (state, action) => {
     switch(action.type) {
+        case LISTANDO_PRODUCTO:
+            return {
+                ...state,
+                creating: false,
+                editing: false,
+                listing: true,
+            }
+        case CREANDO_PRODUCTO:
+            return {
+                ...state,
+                listing: false,
+                editing: false,
+                creating: true,
+            }
+        case EDITANDO_PRODUCTO:
+            return {
+                ...state,
+                listing: false,
+                creating: false,
+                editing: true
+            }
         case OBTENER_PRODUCTOS:
         case OBTENER_PRODUCTOS_FILTRADOS:
             return {
@@ -23,6 +48,11 @@ const ProductReducer = (state, action) => {
                 ...state,
                 products: state.products.map(product => product._id === action.payload.id 
                     ? action.payload.productUpdated : product)
+            }
+        case SELECCIONAR_PRODUCTO:
+            return {
+                ...state,
+                productselected: action.payload
             }
         default: 
             return state;

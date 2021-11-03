@@ -6,11 +6,23 @@ import './NavigationMenu.css';
 import logo from './../Img/Codebox.jpg';
 //CONTEXTO
 import AuthContext from '../../context/auth/AuthContext';
+import ProductContext from "../../context/productos/ProductContext";
+import UserContext from "../../context/usuarios/UserContext";
+import PurchaseContext from "../../context/ventas/PurchaseContext";
 
 const NavigationMenu = () => {
 
     const authsContext = useContext(AuthContext);
     const { user, authenticated, error, closeSession } = authsContext;
+
+    const productsContext = useContext(ProductContext);
+    const { listingProducts } = productsContext;
+
+    const usersContext = useContext(UserContext);
+    const { listingUsers } = usersContext;
+
+    const purchaseContext = useContext(PurchaseContext);
+    const { listingPurchases } = purchaseContext;
 
     const [showMenu, setShowMenu] = useState(false);
 
@@ -30,14 +42,14 @@ const NavigationMenu = () => {
                     authenticated && !error
                     ?
                         <nav className={ !showMenu ? 'main-nav nav-hidden' : 'main-nav nav-shown' }>
-                            <Link to="/ventas">Ventas</Link>
+                            <Link to="/ventas" onClick={ () => { setShowMenu(false); listingPurchases(); } }>Ventas</Link>
                             {
                                 user.role === 'administrador'
                                 ?
                                     <Fragment>
-                                        <Link to="/productos">Productos</Link>
-                                        <Link to="/usuarios">Usuarios</Link>
-                                        <button className="close-session" onClick={ () => closeSession() }>
+                                        <Link to="/productos" onClick={ () => { setShowMenu(false); listingProducts(); } }>Productos</Link>
+                                        <Link to="/usuarios" onClick={ () => { setShowMenu(false); listingUsers(); } }>Usuarios</Link>
+                                        <button className="close-session" onClick={ () => { closeSession(); setShowMenu(false) }  }>
                                             Cerrar Sesión
                                         </button>
                                     </Fragment>

@@ -1,9 +1,14 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
+//COMPONENTES
 import FormularioProducto from './FormularioProducto';
+//CONTEXTO
+import ProductContext from "../../context/productos/ProductContext";
 
-const EditarProducto = (props) => {
+const EditarProducto = () => {
+    const productsContext = useContext(ProductContext);
+    const { productselected } = productsContext;
     
-    const { _id, description, price, status } = props.location.state;
+    const { _id, description, price, status } = productselected;
 
     const [product, setProduct] = useState({
         price: price.toString(),

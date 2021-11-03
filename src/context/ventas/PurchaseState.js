@@ -8,15 +8,23 @@ import clientAxios from '../../config/axios';
 //EVENTOS
 import { 
     AGREGAR_VENTA,
+    CREANDO_VENTA,
+    EDITANDO_VENTA,
     EDITAR_VENTA,
+    LISTANDO_VENTA,
     OBTENER_VENTAS,
-    OBTENER_VENTAS_FILTRADAS
+    OBTENER_VENTAS_FILTRADAS,
+    SELECCIONAR_VENTA
 } from '../../types';
 
 const PurchaseState = props => {
 
     const initialState = {
+        listing: true,
+        creating: false,
+        editing: false,
         purchases: [],
+        purchaseselected: null
     }
 
     //Dispatch para ejecutar las acciones
@@ -56,20 +64,55 @@ const PurchaseState = props => {
         dispatch({
             type: EDITAR_VENTA,
             payload: {
-                purchaseUpdated: purchase,
+                purchaseUpdated: { _id: id, purchase },
                 id: id
             }
         });
     };
 
+    const selectPurchase = (id) => {
+        const purchase = state.purchases.filter(p => p._id === id);
+        const [ result ] = purchase;
+        dispatch({
+            type: SELECCIONAR_VENTA,
+            payload: result
+        });
+    };
+
+    const listingPurchases = () => {
+        dispatch({
+            type: LISTANDO_VENTA
+        })
+    };
+
+    const creatingPurchase = () => {
+        dispatch({
+            type: CREANDO_VENTA
+        })
+    };
+
+    const editingPurchase = () => {
+        dispatch({
+            type: EDITANDO_VENTA
+        })
+    };
+
     return (
         <PurchaseContext.Provider
             value={{
+                listing: state.listing,
+                creating: state.creating,
+                editing: state.editing,
                 purchases: state.purchases,
+                purchaseselected: state.purchaseselected,
+                listingPurchases,
+                creatingPurchase,
+                editingPurchase,
                 getPurchases,
                 getPurchasesFiltered,
                 addPurchase,
-                updatePurchase
+                updatePurchase,
+                selectPurchase
             }}
         >
             { props.children }

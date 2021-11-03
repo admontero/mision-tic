@@ -1,5 +1,4 @@
 import { Fragment, useState, useEffect, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
 //COMPONENTES
 import FormProductoVenta from './FormProductoVenta';
 import Alert from '../includes/Alert';
@@ -14,15 +13,13 @@ const CrearVenta = () => {
 
     //Extraer productos del state inicial
     const purchasesContext = useContext(PurchaseContext);
-    const { addPurchase } = purchasesContext;
+    const { addPurchase, listingPurchases } = purchasesContext;
 
     const authsContext = useContext(AuthContext);
     const { user } = authsContext;
 
     const alertsContext = useContext(AlertContext);
     const { showAlert } = alertsContext;
-
-    let history = useHistory();
 
     const [purchase, setPurchase] = useState({
         _id: '',
@@ -108,9 +105,7 @@ const CrearVenta = () => {
         addPurchase(purchaseFinal)
             .then(() => {
                 showAlert('success', '¡Guardado!', 'El registro ha sido agregado con éxito');
-                history.push({
-                    pathname: '/ventas'
-                });
+                listingPurchases();
             })
             .catch(err => {
                 showAlert('cancel', '¡Error!', err.response.data.msg);
@@ -140,7 +135,13 @@ const CrearVenta = () => {
                     <div className="card">
                         <form method="POST" onSubmit={ submitPurchase }>
                             <div className="card-header">
-                                <h3>Registro de venta</h3>
+                                <div className="title-back">
+                                    <button type="button" onClick={ () => listingPurchases() } className="button-back">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z"></path></svg>
+                                        Atrás
+                                    </button>
+                                    <h3>Registro de venta</h3>
+                                </div>
                             </div>
                             <div className="card-body"> 
                                 <h3 className="label-info">Información general</h3>

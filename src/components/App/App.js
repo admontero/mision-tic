@@ -1,21 +1,17 @@
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom'
+//COMPONENTES
 import Login from "./../Login/Login";
 import NavigationMenu from "../includes/NavigationMenu";
-import ListadoVentas from "../Ventas/ListadoVentas";
-import CrearVenta from '../Ventas/CrearVenta';
-import ListadoUsuarios from '../Usuarios/ListadoUsuarios';
-import ListadoProductos from '../Productos/ListadoProductos';
-import EditarVenta from '../Ventas/EditarVenta'
-import AgregarProducto from '../Productos/AgregarProducto';
-import EditarProducto from '../Productos/EditarProducto';
-import EditarUsuario from '../Usuarios/EditarUsuario';
-
+import ProductoGeneral from '../Productos/ProductoGeneral';
+import UsuarioGeneral from '../Usuarios/UsuarioGeneral';
+import VentaGeneral from '../Ventas/VentaGeneral';
+//ESTADOS
 import AlertState from '../../context/alerts/AlertState';
 import ProductState from '../../context/productos/ProductState';
 import PurchaseState from '../../context/ventas/PurchaseState';
 import UserState from '../../context/usuarios/UserState';
 import AuthState from '../../context/auth/AuthState';
-
+//HELPERS
 import PrivateRoute from "../routes/PrivateRoute";
 import tokenAuth from "../../config/token";
 //CSS E IMAGENES
@@ -43,14 +39,14 @@ const App = () => {
                     <NavigationMenu />
                     <Switch>
                       <Route path="/" exact component={ Login } />
-                      <PrivateRoute path="/ventas" exact component={ ListadoVentas } />
-                      <PrivateRoute path="/ventas/crear" exact component={ CrearVenta } />
-                      <PrivateRoute path="/ventas/editar/:id" exact component={ EditarVenta } />
-                      <PrivateRoute path="/usuarios" exact component={ ListadoUsuarios } />
-                      <PrivateRoute path="/usuarios/editar/:id" exact component={ EditarUsuario } />
-                      <PrivateRoute path="/productos" exact component={ ListadoProductos } />
-                      <PrivateRoute path="/productos/agregar" exact component={ AgregarProducto } />
-                      <PrivateRoute path="/productos/editar/:id" exact component={ EditarProducto } />
+                      <PrivateRoute path="/ventas" exact component={ VentaGeneral } />
+                      <PrivateRoute path="/usuarios" exact component={ UsuarioGeneral } />
+                      <PrivateRoute path="/productos" exact component={ ProductoGeneral } />
+                      {/* <PrivateRoute path="/ventas/crear" exact component={ CrearVenta } />
+                      <PrivateRoute path="/ventas/editar/:id" exact component={ EditarVenta } /> */}
+                      {/* <PrivateRoute path="/usuarios/editar/:id" exact component={ EditarUsuario } /> */}
+                      {/* <PrivateRoute path="/productos/agregar" exact component={ AgregarProducto } />
+                      <PrivateRoute path="/productos/editar/:id" exact component={ EditarProducto } /> */}
                     </Switch>
                   </Router>
                 </AlertState>

@@ -9,12 +9,20 @@ import {
     OBTENER_PRODUCTOS_FILTRADOS,
     AGREGAR_PRODUCTO,
     EDITAR_PRODUCTO,
+    SELECCIONAR_PRODUCTO,
+    LISTANDO_PRODUCTO,
+    CREANDO_PRODUCTO,
+    EDITANDO_PRODUCTO,
 } from '../../types';
 
 const ProductState = props => {
 
     const initialState = {
-        products: []
+        listing: true,
+        creating: false,
+        editing: false,
+        products: [],
+        productselected: null,
     }
 
     //Dispatch para ejecutar las acciones
@@ -52,20 +60,55 @@ const ProductState = props => {
         dispatch({
             type: EDITAR_PRODUCTO,
             payload: { 
-                productUpdated: product,
+                productUpdated: { _id: id, ...product },
                 id: id
             }
         });
     };
 
+    const selectProduct = (id) => {
+        const product = state.products.filter(p => p._id === id);
+        const [ result ] = product;
+        dispatch({
+            type: SELECCIONAR_PRODUCTO,
+            payload: result
+        });
+    };
+
+    const listingProducts = () => {
+        dispatch({
+            type: LISTANDO_PRODUCTO
+        })
+    };
+
+    const creatingProduct = () => {
+        dispatch({
+            type: CREANDO_PRODUCTO
+        })
+    };
+
+    const editingProduct = () => {
+        dispatch({
+            type: EDITANDO_PRODUCTO
+        })
+    };
+
     return (
         <ProductContext.Provider
             value={{
+                listing: state.listing,
+                creating: state.creating,
+                editing: state.editing,
                 products: state.products,
+                productselected: state.productselected,
+                listingProducts,
+                creatingProduct,
+                editingProduct,
                 getProducts,
                 getProductsFiltered,
                 addProduct,
-                updateProduct
+                updateProduct,
+                selectProduct
             }}
         >
             { props.children }

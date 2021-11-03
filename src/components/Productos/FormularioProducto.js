@@ -1,21 +1,18 @@
 import { Fragment, useContext } from "react";
-import { useHistory } from 'react-router-dom';
-//CONTEXT
+//COMPONENTES
+import Alert from '../includes/Alert';
+//CONTEXTO
 import ProductContext from '../../context/productos/ProductContext';
 import AlertContext from '../../context/alerts/AlertContext';
-//COMPONENTS
-import Alert from '../includes/Alert';
 
 const FormularioProducto = (props) => {
 
     //HOOKS AND DESTRUCTURING
     const productsContext = useContext(ProductContext);
-    const { addProduct, updateProduct } = productsContext;
+    const { listingProducts, addProduct, updateProduct } = productsContext;
 
     const alertsContext = useContext(AlertContext);
     const { showAlert } = alertsContext;
-
-    let history = useHistory();
 
     //EVENTOS
     const changeProduct = e => {
@@ -38,8 +35,8 @@ const FormularioProducto = (props) => {
         addProduct(props.product).then(() => {
             //Mostrar alerta
             showAlert('success', '¡Guardado!', 'El registro ha sido agregado con éxito');
-            //Redirigir a listado de productos
-            history.push({ pathname: '/productos' });
+            //Redirigir a listado
+            listingProducts();
         });
     }
 
@@ -57,7 +54,7 @@ const FormularioProducto = (props) => {
             //Mostrar alerta
             showAlert('success', '¡Guardado!', 'Los cambios se han guardado con éxito');
             //Redirigir a listado de productos
-            history.push({ pathname: '/productos' });
+            listingProducts();
         });
     }
 
@@ -66,8 +63,14 @@ const FormularioProducto = (props) => {
             <Alert />
             <form method="POST" onSubmit={ props.id ? editProduct : createProduct }>
                 <div className="card-header">
-                    <h3>{ props.id ? 'Edición de Producto' : 'Registro de Producto' }</h3>
-                </div>
+                    <div className="title-back">
+                        <button type="button" onClick={ () => listingProducts() } className="button-back">
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z"></path></svg>
+                            Atrás
+                        </button>
+                        <h3>{ props.id ? 'Edición de Producto' : 'Registro de Producto' }</h3>
+                    </div>
+                </div>  
                 <div className="card-body"> 
                     <h3 className="label-info">Información general</h3>
                     <div className="form-section">

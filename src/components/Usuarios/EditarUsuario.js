@@ -1,28 +1,25 @@
-import React, {Fragment, useState, useContext} from 'react';
-import { useHistory } from 'react-router';
+import React, { Fragment, useState, useContext } from 'react';
 //COMPONENTS
 import Alert from '../includes/Alert';
 //CONTEXT
 import AlertContext from "../../context/alerts/AlertContext";
 import UserContext from '../../context/usuarios/UserContext';
 
-const EditarUsuario = (props) => {
+const EditarUsuario = () => {
 
     //HOOKS AND DESTRUCTURING
     const alertsContext = useContext(AlertContext);
     const { showAlert } = alertsContext;
 
     const usersContext = useContext(UserContext);
-    const { updateUser } = usersContext;
+    const { userselected, updateUser, listingUsers } = usersContext;
 
-    const { role, status, _id } = props.location.state;
+    const { role, status, _id } = userselected;
     
     const [user, setUser] = useState({
         role: role,
         status: status.toString(),
     });
-
-    let history = useHistory();
 
     //EVENTOS
     const changeUser = e => {
@@ -45,9 +42,7 @@ const EditarUsuario = (props) => {
         updateUser(user, _id)
             .then(() => {
                 showAlert('success', '¡Guardado!', 'Los cambios se han guardado con éxito');
-                history.push({
-                    pathname: '/usuarios'
-                });
+                listingUsers();
             })
             .catch(err => {
                 showAlert('cancel', '¡Error!', err.response.data.msg);
@@ -62,7 +57,13 @@ const EditarUsuario = (props) => {
                     <div className="card">
                         <form method="POST" onSubmit={ submitForm }>
                             <div className="card-header">
-                                <h3>Editar Usuario</h3>
+                                <div className="title-back">
+                                    <button type="button" onClick={ () => listingUsers() } className="button-back">
+                                        <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z"></path></svg>
+                                        Atrás
+                                    </button>
+                                    <h3>Editar Usuario</h3>
+                                </div>
                             </div>
                             <div className="card-body"> 
                                 <h3 className="label-info">Información general</h3>

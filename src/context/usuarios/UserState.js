@@ -7,14 +7,20 @@ import UserReducer from './UserReducer';
 import clientAxios from '../../config/axios';
 //EVENTOS
 import { 
+    EDITANDO_USUARIO,
     EDITAR_USUARIO,
-    OBTENER_USUARIOS
+    LISTANDO_USUARIO,
+    OBTENER_USUARIOS,
+    SELECCIONAR_USUARIO
 } from '../../types';
 
 const UserState = props => {
 
     const initialState = {
-        users: []
+        listing: true,
+        editing: false,
+        users: [],
+        userselected: null
     }
 
     //Dispatch para ejecutar las acciones
@@ -37,18 +43,45 @@ const UserState = props => {
         dispatch({
             type: EDITAR_USUARIO,
             payload: {
-                userUpdated: user,
+                userUpdated: { _id: id, user },
                 id: id
             }
         });
+    };
+    
+    const selectUser = (id) => {
+        const user = state.users.filter(u => u._id === id);
+        const [ result ] = user;
+        dispatch({
+            type: SELECCIONAR_USUARIO,
+            payload: result
+        });
+    };
+
+    const listingUsers = () => {
+        dispatch({
+            type: LISTANDO_USUARIO
+        })
+    };
+
+    const editingUser = () => {
+        dispatch({
+            type: EDITANDO_USUARIO
+        })
     };
 
     return (
         <UserContext.Provider
             value={{
+                listing: state.listing,
+                editing: state.editing,
                 users: state.users,
+                userselected: state.userselected,
                 getUsers,
-                updateUser
+                updateUser,
+                selectUser,
+                listingUsers,
+                editingUser
             }}
         >
             { props.children }

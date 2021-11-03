@@ -1,5 +1,4 @@
 import { Fragment, useState, useEffect, useContext } from 'react';
-import { useHistory } from 'react-router-dom';
 //COMPONENTES
 import FormProductoVenta from './FormProductoVenta';
 import Alert from '../includes/Alert';
@@ -9,20 +8,20 @@ import AlertContext from "../../context/alerts/AlertContext";
 //HELPERS
 import calculateTotal from '../../config/calculateTotal';
 
-const EditarVenta = (props) => {
+const EditarVenta = () => {
 
     //Extraer productos del state inicial
     const purchasesContext = useContext(PurchaseContext);
-    const { updatePurchase } = purchasesContext;
+    const { purchaseselected, updatePurchase, listingPurchases } = purchasesContext;
 
     const alertsContext = useContext(AlertContext);
     const { showAlert } = alertsContext;
     
-    const { _id, date, total, status, client_id, client_name } = props.location.state;
+    const { _id, date, total, status, client_id, client_name, products } = purchaseselected;
     
     useEffect(() => {
         setProductsPurchased([
-            ...props.location.state.products
+            ...products
         ]);
         //eslint-disable-next-line
     }, []);
@@ -44,8 +43,6 @@ const EditarVenta = (props) => {
         client_id: client_id.toString(),
         client_name: client_name,
     });
-
-    let history = useHistory();
 
     //EVENTOS
     const changePurchase = e => {
@@ -99,9 +96,7 @@ const EditarVenta = (props) => {
         updatePurchase(purchaseFinal, _id)
             .then(() => {
                 showAlert('success', '¡Guardado!', 'Los cambios se han guardado con éxito');
-                history.push({
-                    pathname: '/ventas'
-                });
+                listingPurchases();
             })
             .catch(err => {
                 console.log(err);
@@ -131,7 +126,13 @@ const EditarVenta = (props) => {
                     <div className="card">
                         <form method="POST" onSubmit={ submitPurchase }>
                             <div className="card-header">
-                                <h3>Editar Venta</h3>
+                                <div className="title-back">
+                                        <button type="button" onClick={ () => listingPurchases() } className="button-back">
+                                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z"></path></svg>
+                                            Atrás
+                                    </button>
+                                    <h3>Editar Venta</h3>
+                                </div>
                             </div>
                             <div className="card-body"> 
                                 <h3 className="label-info">Información general</h3>
