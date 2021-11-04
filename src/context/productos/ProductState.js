@@ -13,6 +13,7 @@ import {
     LISTANDO_PRODUCTO,
     CREANDO_PRODUCTO,
     EDITANDO_PRODUCTO,
+    OBTENER_PRODUCTOS_DISPONIBLES,
 } from '../../types';
 
 const ProductState = props => {
@@ -22,6 +23,7 @@ const ProductState = props => {
         creating: false,
         editing: false,
         products: [],
+        productsavailable: [],
         productselected: null,
     }
 
@@ -45,6 +47,20 @@ const ProductState = props => {
             type: OBTENER_PRODUCTOS_FILTRADOS,
             payload: results.data.products
         });
+    };
+
+    const getProductsAvailable = () => {
+        if (state.products.length === 0) {
+            getProducts().then( () =>
+                dispatch({
+                    type: OBTENER_PRODUCTOS_DISPONIBLES
+                })
+            );
+        } else {
+            dispatch({
+                type: OBTENER_PRODUCTOS_DISPONIBLES
+            });
+        }
     };
 
     const addProduct = async product => {
@@ -100,12 +116,14 @@ const ProductState = props => {
                 creating: state.creating,
                 editing: state.editing,
                 products: state.products,
+                productsavailable: state.productsavailable,
                 productselected: state.productselected,
                 listingProducts,
                 creatingProduct,
                 editingProduct,
                 getProducts,
                 getProductsFiltered,
+                getProductsAvailable,
                 addProduct,
                 updateProduct,
                 selectProduct

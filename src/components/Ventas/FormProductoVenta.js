@@ -5,13 +5,13 @@ import ProductContext from "../../context/productos/ProductContext";
 const FormProductoVenta = ({ edit, productTmp, productsPurchased, setEdit, setProductTmp, setProductsPurchased, showAlert }) => {
 
     const productsContext = useContext(ProductContext);
-    const { products, getProducts } = productsContext;
+    const { productsavailable, getProductsAvailable } = productsContext;
 
     const { product_id, product_price, product_quantity } = productTmp;
 
     //Obtener productos cuando cargue el componente
     useEffect(() => {
-        getProducts();
+        getProductsAvailable();
         //eslint-disable-next-line
     }, []);
 
@@ -29,19 +29,22 @@ const FormProductoVenta = ({ edit, productTmp, productsPurchased, setEdit, setPr
             //return alert('El id, el precio y la cantidad del producto son requeridos');
         }
 
-        let result = products.filter(product => product._id === product_id);
+        let result = productsavailable.filter(product => product._id === product_id);
 
         if (result.length === 0) {
-            return showAlert('cancel', '¡Error!', 'No existe un producto con este id');
+            return showAlert('cancel', '¡Error!', 'El producto con ese id no está disponible');
             //return alert('No hay productos con este id');
         }
 
         setProductTmp(productTmp);
 
-        setProductsPurchased([
-            ...productsPurchased,
-            productTmp
-        ]);
+        //Verificar que ya este en el arreglo
+        const exist = productsPurchased.some(p => p.product_id === product_id);
+
+        setProductsPurchased(
+            exist 
+                ? [ ...productsPurchased.map(p => p.product_id === product_id ? {...productTmp, product_quantity: Number(p.product_quantity) + Number(product_quantity) } : p) ] 
+                : [ ...productsPurchased, productTmp ]);
 
         setProductTmp({
             product_id: '',
@@ -67,18 +70,23 @@ const FormProductoVenta = ({ edit, productTmp, productsPurchased, setEdit, setPr
 
     return ( 
         <Fragment>
+            {
+                !edit ?
+                    <div className="form-group">
+                        <label htmlFor="product_id">ID Producto</label>
+                        <input 
+                            type="text" 
+                            id="product_id" 
+                            name="product_id" 
+                            onChange={ changeProduct }
+                            value={ product_id }
+                        />
+                    </div>
+                :
+                    null
+            }
             <div className="form-group">
-                <label htmlFor="product_id">ID producto</label>
-                <input 
-                    type="text" 
-                    id="product_id" 
-                    name="product_id" 
-                    onChange={ changeProduct }
-                    value={ product_id }
-                />
-            </div>
-            <div className="form-group">
-                <label htmlFor="product_quantity">Cantidad</label>
+                <label htmlFor="product_quantity">Cantidad Vendida</label>
                 <input 
                     type="number" 
                     id="product_quantity" 
@@ -88,7 +96,7 @@ const FormProductoVenta = ({ edit, productTmp, productsPurchased, setEdit, setPr
                 />
             </div>
             <div className="form-group">
-                <label htmlFor="product_price">Precio unitario</label>
+                <label htmlFor="product_price">Precio de Venta</label>
                 <input 
                     type="number" 
                     id="product_price" 

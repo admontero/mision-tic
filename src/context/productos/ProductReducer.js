@@ -7,6 +7,7 @@ import {
     LISTANDO_PRODUCTO,
     CREANDO_PRODUCTO,
     EDITANDO_PRODUCTO,
+    OBTENER_PRODUCTOS_DISPONIBLES,
 } from '../../types';
 
 const ProductReducer = (state, action) => {
@@ -37,6 +38,11 @@ const ProductReducer = (state, action) => {
             return {
                 ...state,
                 products: action.payload
+            }
+        case OBTENER_PRODUCTOS_DISPONIBLES:
+            return {
+                ...state,
+                productsavailable: state.products.filter(product => product.status === 'disponible')
             }
         case AGREGAR_PRODUCTO:
             return {
